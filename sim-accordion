@@ -1,0 +1,73 @@
+(function() {
+
+    "use strict";
+
+    /**
+     *
+     * Dependencies:- JQUERY
+     *
+     * Syntactical Requirements:-
+     *
+     * Parent: .sim-accordion
+     * Heading: .sim-slider
+     * Heading with data-id attr: #sim-slider-body-{id}
+     * Body: .sim-slider-body
+     *
+     */
+
+    // Get the parent element and heading list
+    // of all the slider elements
+    var parent = $(".sim-accordion"),
+        list = parent.find(".sim-slider h1");
+
+    // Hide all the slider elements in the beginning
+    $(".sim-slider-body").hide();
+
+    // Loop through all the list of slider elements
+    $.each(list, function() {
+        // When someone click on each element
+        // this event is going to fire up
+        $(this).on("click", function() {
+            // setup required variables
+            // first:- the heading element  itself
+            // second:- the data-id attribute for value of id for the body element
+            var self = $(this),
+                id = $(self.data("id"));
+
+            // Run the above loop again on list
+            // to hide all other elements instead the one clicked
+            $.each(list, function(e, v) {
+                // setup required variables
+                // first:- the heading element itself
+                // second:- the data-id attribute for value of id
+                var iSelf = $(this),
+                    id = $(iSelf.data("id"));
+
+                // match the id of actual clicked self (element) and
+                // all the other elements (iSelf) in the list
+                if (self.data("id") !== iSelf.data("id")) {
+                    // slideUp all the other elements body not the one clicked
+                    id.slideUp("100");
+
+                    // set data attribute to up so that the below logic works smoothly
+                    iSelf.data("slide", "up");
+                }
+            });
+
+            // Check the data-slide attribute of heading element (clicked element)
+            // up - slideUp
+            // down - slideDown
+            // undefined - slideDown
+            if (self.data("slide") == "up") {
+                self.data("slide", "down");
+                id.slideDown("100");
+            } else if (self.data("slide") == "down") {
+                self.data("slide", "up");
+                id.slideUp("100");
+            } else if (self.data("slide") === undefined) {
+                self.data("slide", "down");
+                id.slideDown("100");
+            }
+        });
+    });
+}());
